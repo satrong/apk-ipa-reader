@@ -20,6 +20,8 @@ window.APK_IPA_READER = function (fileInputDom, callback, workerScriptsPath) {
                 APK(entries, callback/* (err, fileinfo) */);
             } else if (/\.ipa$/i.test(file.name)) {
                 IPA(entries, callback/* (err, fileinfo) */);
+            } else {
+                callback('只支持apk和ipa文件格式');
             }
         });
     }, false);
