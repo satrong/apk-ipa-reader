@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./dist/index.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="file" id="file-input" accept="application/*" value="选择文件" />
+    <div id="file-list"></div>
+
+    <script>
+        APK_IPA_READER(document.getElementById('file-input'), function (err, fileinfo) {
+            if (err) {
+                console.log(err);
+            } else {
+                var img = document.createElement('img');
+                img.src = fileinfo.icon;
+                document.getElementById('file-list').appendChild(img);
+
+                ['name', 'versionShort'].forEach(function (item) {
+                    var div = document.createElement('div');
+                    div.textContent = fileinfo[item];
+                    document.getElementById('file-list').appendChild(div);
+                });
+            }
+        }, './dist/');
+    </script>
+</body>
+
+</html>
