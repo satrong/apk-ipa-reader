@@ -1,4 +1,4 @@
-Read apk file and ipa file's name, logo, version.
+Browser Javascript read apk file and ipa file's name, logo, version.
 
 > Part of codes come from https://fir.im .
 
