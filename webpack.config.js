@@ -31,7 +31,7 @@ module.exports = {
     performance: {
         hints: false
     },
-    devtool: '#eval-source-map',
+    // devtool: '#eval-source-map',
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
@@ -66,7 +66,7 @@ VersionWebpackPlugin.prototype.apply = function (compiler) {
     compiler.plugin('emit', function (compilation, callback) {
         const assets = compilation.assets['index.js?' + compilation.hash];
         if (assets) {
-            assets._value = `/* version: ${version}, author: ck */\n ${assets._value}`;
+            assets._value = `/* version: ${version}, author: satrong */\n ${assets._value}`;
         }
         callback();
     });
