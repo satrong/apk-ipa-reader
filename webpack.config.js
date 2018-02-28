@@ -5,22 +5,13 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: ['./src/index.js'],
+    entry: ['./src/output.js'],
     output: {
         path: path.resolve(__dirname, './dist'),
         filename: 'index.js?[hash]'
     },
     module: {
         rules: [
-            // {
-            //     test: require.resolve('knockout'),
-            //     use: [
-            //         {
-            //             loader: 'expose-loader',
-            //             options: 'ko'
-            //         }
-            //     ]
-            // },
             {
                 test: /\.js$/,
                 loader: 'babel-loader',

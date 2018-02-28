@@ -11,7 +11,7 @@ import IPA from './ipa.js';
  * @param {Function} callback 回调函数
  * @param {String} workerScriptsPath 设置引用 zip/inflate.js和z-worker.js的路径
  */
-window.APK_IPA_READER = function (fileInputDom, callback, workerScriptsPath) {
+const APK_IPA_READER = function (fileInputDom, callback, workerScriptsPath) {
     zip.workerScriptsPath = workerScriptsPath;
     fileInputDom.addEventListener('change', function () {
         var file = fileInputDom.files[0];
@@ -26,3 +26,5 @@ window.APK_IPA_READER = function (fileInputDom, callback, workerScriptsPath) {
         });
     }, false);
 }
+
+export default APK_IPA_READER;
