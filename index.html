@@ -14,21 +14,25 @@
     <div id="file-list"></div>
 
     <script>
-        APK_IPA_READER(document.getElementById('file-input'), function (err, fileinfo) {
-            if (err) {
-                console.log(err);
-            } else {
-                var img = document.createElement('img');
-                img.src = fileinfo.icon;
-                document.getElementById('file-list').appendChild(img);
+        var reader = new APK_IPA_READER({
+            workerScriptsPath: './dist/',
+            callback: function (err, fileinfo) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    var img = document.createElement('img');
+                    img.src = fileinfo.icon;
+                    document.getElementById('file-list').appendChild(img);
 
-                ['name', 'versionShort'].forEach(function (item) {
-                    var div = document.createElement('div');
-                    div.textContent = fileinfo[item];
-                    document.getElementById('file-list').appendChild(div);
-                });
-            }
-        }, './dist/');
+                    ['name', 'versionShort'].forEach(function (item) {
+                        var div = document.createElement('div');
+                        div.textContent = fileinfo[item];
+                        document.getElementById('file-list').appendChild(div);
+                    });
+                }
+            },
+        });
+        reader.byInput(document.getElementById('file-input'));
     </script>
 </body>
 
