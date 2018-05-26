@@ -177,6 +177,7 @@ export default function (a, c) {
                 k = 1;
             }
             g.icon = PNGConvertor(g.icon);
+            g.ext = 'ipa';
             c(null, g);
         }
         u.getData(new zip.BlobWriter(i), function (a) {

@@ -30,6 +30,7 @@ export default function (entries, callback) {
                             fileinfo.targetSdkVersion = attrs.targetSdkVersion;
                             fileinfo.release_type = "inhouse";
                             fileinfo.icon = attrs.icon;
+                            fileinfo.ext = 'apk';
 
                             entries.forEach(function (el) {
                                 if (el.filename === fileinfo.icon) {
