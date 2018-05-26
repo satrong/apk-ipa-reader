@@ -1,9 +1,10 @@
 {
   "name": "apk-ipa-reader",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "web端JavaScript读取apk包和ipa包的信息",
   "main": "src/index.js",
   "scripts": {
+    "start": "npm run dist && npm run build",
     "dist": "rimraf ./dist && ./node_modules/webpack/bin/webpack.js",
     "build": "rimraf ./build && ./node_modules/.bin/babel ./src -d ./build",
     "test": "echo \"Error: no test specified\" && exit 1"

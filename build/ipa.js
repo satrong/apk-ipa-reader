@@ -164,6 +164,7 @@ exports.default = function (a, c) {
                 k = 1;
             }
             g.icon = (0, _lib.PNGConvertor)(g.icon);
+            g.ext = 'ipa';
             c(null, g);
         };
         u.getData(new zip.BlobWriter(i), function (a) {
