@@ -1,6 +1,6 @@
 {
   "name": "apk-ipa-reader",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "web端JavaScript读取apk包和ipa包的信息",
   "main": "src/index.js",
   "scripts": {
