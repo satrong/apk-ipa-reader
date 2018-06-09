@@ -18,7 +18,7 @@
             workerScriptsPath: './dist/',
             callback: function (apps) {
                 apps.forEach(function (app) {
-                    if (app.status) {
+                    if (!app.status) {
                         console.log(app.info);
                     } else {
                         var fileinfo = app.data;
