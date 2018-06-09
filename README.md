@@ -13,6 +13,7 @@ var reader = new APK_IPA_READER({
 reader.byInput(fileInputDom);
 // or
 // reader.byDrag(dragDom);
+reader.removeEvent(); // remove event listener
 ```
 
 - `callback`: The callback function, will get two arguments: `error`(if ok it will be `null`) and `fileinfo`(i.e. name, logo, version)
