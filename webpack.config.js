@@ -22,7 +22,7 @@ module.exports = {
     performance: {
         hints: false
     },
-    // devtool: '#eval-source-map',
+    devtool: '#source-map',
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
@@ -33,7 +33,8 @@ module.exports = {
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false
-            }
+            },
+            sourceMap: true
         }),
         new webpack.LoaderOptionsPlugin({
             minimize: true
