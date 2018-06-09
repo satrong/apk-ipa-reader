@@ -58,7 +58,7 @@ export default class {
         Array.prototype.forEach.call(doms, dom => {
             const cb = e => {
                 callback && callback();
-                this.reader(dom.file, e);
+                this.reader(dom.files, e);
             }
             dom.addEventListener('change', cb, false);
             this.recordEvent('change', dom, cb);

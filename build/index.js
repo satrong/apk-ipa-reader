@@ -152,7 +152,7 @@ var _class = function () {
             Array.prototype.forEach.call(doms, function (dom) {
                 var cb = function cb(e) {
                     callback && callback();
-                    _this.reader(dom.file, e);
+                    _this.reader(dom.files, e);
                 };
                 dom.addEventListener('change', cb, false);
                 _this.recordEvent('change', dom, cb);
