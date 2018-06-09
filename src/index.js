@@ -10,6 +10,11 @@ export default class {
     constructor(options) {
         zip.workerScriptsPath = options.workerScriptsPath; // 设置引用 zip/inflate.js和z-worker.js的路径
         this.callback = options.callback || function () { };
+        this.events = [];
+    }
+
+    recordEvent(eventName, dom, listener) {
+        this.events.push({ eventName, dom, listener });
     }
 
     async reader(files, event) {
@@ -51,10 +56,12 @@ export default class {
     byInput(doms, callback) {
         doms = /HTMLCollection|Array/i.test(Object.prototype.toString.call(doms)) ? doms : [doms];
         Array.prototype.forEach.call(doms, dom => {
-            dom.addEventListener('change', e => {
+            const cb = e => {
                 callback && callback();
-                this.reader(dom.files, e);
-            }, false);
+                this.reader(dom.file, e);
+            }
+            dom.addEventListener('change', cb, false);
+            this.recordEvent('change', dom, cb);
         });
     }
 
@@ -74,23 +81,38 @@ export default class {
         options = options || {};
         Array.prototype.forEach.call(doms, dom => {
             //拖进
-            dom.addEventListener('dragenter', e => {
+            const dragenter = e => {
                 e.preventDefault();
                 options.dragenter && options.dragenter();
-            }, false);
+            };
+            dom.addEventListener('dragenter', dragenter, false);
+            this.recordEvent('dragenter', dom, dragenter);
 
             //拖离
-            dom.addEventListener('dragleave', e => {
+            const dragleave = e => {
                 options.dragleave && options.dragleave(e);
-            }, false);
+            };
+            dom.addEventListener('dragleave', dragleave, false);
+            this.recordEvent('dragleave', dom, dragleave);
 
-            dom.addEventListener('dragover', e => e.preventDefault(), false);
+            const dragover = e => e.preventDefault();
+            dom.addEventListener('dragover', dragover, false);
+            this.recordEvent('dragover', dom, dragover);
 
-            dom.addEventListener('drop', e => {
+            const drop = e => {
                 e.preventDefault();
                 callback && callback();
                 this.reader(e.dataTransfer.files);
-            }, false);
+            };
+            dom.addEventListener('drop', drop, false);
+            this.recordEvent('drop', dom, drop);
+        });
+    }
+
+    // 移除监听事件
+    removeEvent() {
+        this.events.forEach(el => {
+            el.dom.removeEventListener(el.eventName, el.listener, false);
         });
     }
 };
