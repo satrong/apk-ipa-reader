@@ -16,20 +16,23 @@
     <script>
         var reader = new APK_IPA_READER({
             workerScriptsPath: './dist/',
-            callback: function (err, fileinfo) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    var img = document.createElement('img');
-                    img.src = fileinfo.icon;
-                    document.getElementById('file-list').appendChild(img);
+            callback: function (apps) {
+                apps.forEach(function (app) {
+                    if (app.status) {
+                        console.log(app.info);
+                    } else {
+                        var fileinfo = app.data;
+                        var img = document.createElement('img');
+                        img.src = fileinfo.icon;
+                        document.getElementById('file-list').appendChild(img);
 
-                    ['name', 'versionShort'].forEach(function (item) {
-                        var div = document.createElement('div');
-                        div.textContent = fileinfo[item];
-                        document.getElementById('file-list').appendChild(div);
-                    });
-                }
+                        ['name', 'versionShort'].forEach(function (item) {
+                            var div = document.createElement('div');
+                            div.textContent = fileinfo[item];
+                            document.getElementById('file-list').appendChild(div);
+                        });
+                    }
+                });
             },
         });
         reader.byInput(document.getElementById('file-input'));

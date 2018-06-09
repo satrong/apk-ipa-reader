@@ -4,6 +4,22 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _assign = require('babel-runtime/core-js/object/assign');
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
+var _regenerator = require('babel-runtime/regenerator');
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -37,20 +53,82 @@ var _class = function () {
 
         zip.workerScriptsPath = options.workerScriptsPath; // 设置引用 zip/inflate.js和z-worker.js的路径
         this.callback = options.callback || function () {};
-        this.file = null;
     }
 
     (0, _createClass3.default)(_class, [{
         key: 'reader',
-        value: function reader(file, callback) {
-            _model2.default.getEntries(file, function (entries) {
-                if (/\.apk$/i.test(file.name)) {
-                    (0, _apk2.default)(entries, callback /* (err, fileinfo) */);
-                } else if (/\.ipa$/i.test(file.name)) {
-                    (0, _ipa2.default)(entries, callback /* (err, fileinfo) */);
-                } else {
-                    callback('只支持apk和ipa文件格式');
-                }
+        value: function () {
+            var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(files, event) {
+                var results, i, len;
+                return _regenerator2.default.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                results = [];
+                                i = 0, len = files.length;
+
+                            case 2:
+                                if (!(i < len)) {
+                                    _context.next = 11;
+                                    break;
+                                }
+
+                                _context.t0 = results;
+                                _context.next = 6;
+                                return this.readerFile(files[i]);
+
+                            case 6:
+                                _context.t1 = _context.sent;
+
+                                _context.t0.push.call(_context.t0, _context.t1);
+
+                            case 8:
+                                i++;
+                                _context.next = 2;
+                                break;
+
+                            case 11:
+                                if (event && event.target) event.target.value = '';
+                                this.callback(results);
+
+                            case 13:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this);
+            }));
+
+            function reader(_x, _x2) {
+                return _ref.apply(this, arguments);
+            }
+
+            return reader;
+        }()
+    }, {
+        key: 'readerFile',
+        value: function readerFile(file) {
+            return new _promise2.default(function (resolve) {
+                var r = function r(err, info) {
+                    return resolve({
+                        status: !err,
+                        info: err,
+                        data: (0, _assign2.default)({ filename: file.name, file: file }, info)
+                    });
+                };
+                _model2.default.getEntries(file, function (entries) {
+                    if (/\.apk$/i.test(file.name)) {
+                        (0, _apk2.default)(entries, r);
+                    } else if (/\.ipa$/i.test(file.name)) {
+                        (0, _ipa2.default)(entries, r);
+                    } else {
+                        resolve({
+                            status: false,
+                            info: '只支持apk和ipa文件格式',
+                            data: { filename: file.name }
+                        });
+                    }
+                });
             });
         }
 
@@ -61,15 +139,14 @@ var _class = function () {
 
     }, {
         key: 'byInput',
-        value: function byInput(doms) {
+        value: function byInput(doms, callback) {
             var _this = this;
 
             doms = /HTMLCollection|Array/i.test(Object.prototype.toString.call(doms)) ? doms : [doms];
             Array.prototype.forEach.call(doms, function (dom) {
                 dom.addEventListener('change', function (e) {
-                    _this.file = dom.files[0];
-                    _this.reader(dom.files[0], _this.callback);
-                    e.target.value = '';
+                    callback && callback();
+                    _this.reader(dom.files, e);
                 }, false);
             });
         }
@@ -82,9 +159,15 @@ var _class = function () {
 
     }, {
         key: 'byDrag',
-        value: function byDrag(doms, options) {
+        value: function byDrag(doms, options, callback) {
             var _this2 = this;
 
+            if (arguments.length === 2) {
+                if (typeof options === 'function') {
+                    callback = options;
+                    options = {};
+                }
+            }
             doms = /HTMLCollection|Array/i.test(Object.prototype.toString.call(doms)) ? doms : [doms];
             options = options || {};
             Array.prototype.forEach.call(doms, function (dom) {
@@ -105,8 +188,8 @@ var _class = function () {
 
                 dom.addEventListener('drop', function (e) {
                     e.preventDefault();
-                    _this2.file = e.dataTransfer.files[0];
-                    _this2.reader(e.dataTransfer.files[0], _this2.callback);
+                    callback && callback();
+                    _this2.reader(e.dataTransfer.files);
                 }, false);
             });
         }
