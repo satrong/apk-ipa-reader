@@ -5,7 +5,7 @@ Browser Javascript read apk file and ipa file's name, logo, version.
 # Usage
 ```js
 var reader = new APK_IPA_READER({
-    callback: function(err, infos){
+    callback: function(apps){
         // do something after get file info
     }, 
     workerScriptsPath: './'
