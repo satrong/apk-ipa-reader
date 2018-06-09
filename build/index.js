@@ -53,9 +53,15 @@ var _class = function () {
 
         zip.workerScriptsPath = options.workerScriptsPath; // 设置引用 zip/inflate.js和z-worker.js的路径
         this.callback = options.callback || function () {};
+        this.events = [];
     }
 
     (0, _createClass3.default)(_class, [{
+        key: 'recordEvent',
+        value: function recordEvent(eventName, dom, listener) {
+            this.events.push({ eventName: eventName, dom: dom, listener: listener });
+        }
+    }, {
         key: 'reader',
         value: function () {
             var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(files, event) {
@@ -144,10 +150,12 @@ var _class = function () {
 
             doms = /HTMLCollection|Array/i.test(Object.prototype.toString.call(doms)) ? doms : [doms];
             Array.prototype.forEach.call(doms, function (dom) {
-                dom.addEventListener('change', function (e) {
+                var cb = function cb(e) {
                     callback && callback();
-                    _this.reader(dom.files, e);
-                }, false);
+                    _this.reader(dom.file, e);
+                };
+                dom.addEventListener('change', cb, false);
+                _this.recordEvent('change', dom, cb);
             });
         }
 
@@ -172,25 +180,43 @@ var _class = function () {
             options = options || {};
             Array.prototype.forEach.call(doms, function (dom) {
                 //拖进
-                dom.addEventListener('dragenter', function (e) {
+                var dragenter = function dragenter(e) {
                     e.preventDefault();
                     options.dragenter && options.dragenter();
-                }, false);
+                };
+                dom.addEventListener('dragenter', dragenter, false);
+                _this2.recordEvent('dragenter', dom, dragenter);
 
                 //拖离
-                dom.addEventListener('dragleave', function (e) {
+                var dragleave = function dragleave(e) {
                     options.dragleave && options.dragleave(e);
-                }, false);
+                };
+                dom.addEventListener('dragleave', dragleave, false);
+                _this2.recordEvent('dragleave', dom, dragleave);
 
-                dom.addEventListener('dragover', function (e) {
+                var dragover = function dragover(e) {
                     return e.preventDefault();
-                }, false);
+                };
+                dom.addEventListener('dragover', dragover, false);
+                _this2.recordEvent('dragover', dom, dragover);
 
-                dom.addEventListener('drop', function (e) {
+                var drop = function drop(e) {
                     e.preventDefault();
                     callback && callback();
                     _this2.reader(e.dataTransfer.files);
-                }, false);
+                };
+                dom.addEventListener('drop', drop, false);
+                _this2.recordEvent('drop', dom, drop);
+            });
+        }
+
+        // 移除监听事件
+
+    }, {
+        key: 'removeEvent',
+        value: function removeEvent() {
+            this.events.forEach(function (el) {
+                el.dom.removeEventListener(el.eventName, el.listener, false);
             });
         }
     }]);
